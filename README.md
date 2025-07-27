@@ -48,9 +48,9 @@ multi_agent_test/
 ├── .gitignore
 ├── README.md
 ├── pytest.ini             # Test configuration
-├── requirements-test.txt  # Testing dependencies
+├── requirements.txt  # Testing dependencies
 ├── graph.png              # Auto-generated workflow diagram (in development mode)
-└── INITIAL.md            # Project requirements
+
 ```
 
 ## Features
