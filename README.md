@@ -14,7 +14,6 @@ User Query → Input Node → Router Agent → Specialized Agent → Supervisor 
 Below is a visual representation of the system architecture:
 
 ![Workflow Diagram](graph.png)
-
 ### Components
 
 - **Input Node**: Processes initial user queries
@@ -145,6 +144,8 @@ python main.py
 ```
 
 This will run the system with three example queries demonstrating different agent types. In development mode (APP_ENV=development), this will also generate a `graph.png` file showing the workflow visualization.
+
+![Output](output.png)
 
 ### Using the System Programmatically
 
@@ -308,14 +309,12 @@ test_queries = [
 ]
 ```
 
-### Output
+### Contributing
 
-
-```python
-python main.py
-```
-
-![Output](output.png)
+1. Follow the existing code structure
+2. Add appropriate logging
+3. Update documentation for new features
+4. Test with various query types
 
 ## License
 
