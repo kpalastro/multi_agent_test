@@ -9,6 +9,11 @@ User Query → Input Node → Router Agent → Specialized Agent → Supervisor 
                               ↓
                     [Billing | Technical | General]
 ```
+## Workflow Diagram
+
+Below is a visual representation of the system architecture:
+
+![Workflow Diagram](graph.png)
 
 ### Components
 
@@ -21,11 +26,7 @@ User Query → Input Node → Router Agent → Specialized Agent → Supervisor 
 - **Supervisor Agent**: Performs quality assurance and edits responses as needed
 - **Final Response Node**: Returns the approved response to the user
 
-## Workflow Diagram
 
-Below is a visual representation of the system architecture:
-
-![Workflow Diagram](graph.png)
 
 ## Project Structure
 
@@ -307,12 +308,14 @@ test_queries = [
 ]
 ```
 
-### Contributing
+### Output
 
-1. Follow the existing code structure
-2. Add appropriate logging
-3. Update documentation for new features
-4. Test with various query types
+
+```python
+python main.py
+```
+
+![Output](output.png)
 
 ## License
 
