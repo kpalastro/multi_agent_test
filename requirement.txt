@@ -1,0 +1,9 @@
+# Testing dependencies
+pytest>=7.0
+pytest-cov>=4.0
+pytest-mock>=3.10
+
+# Main dependencies (if not already installed)
+langgraph
+langchain-core
+python-dotenv

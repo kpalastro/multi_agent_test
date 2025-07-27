@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+.pytest_cache/
+.coverage
+.claude/
+.cursor/
+.taskmaster/
+.venv/
+
+# Environment variables
+.env
+INITIAL.md
