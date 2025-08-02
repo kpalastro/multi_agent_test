@@ -145,6 +145,158 @@ python main.py
 
 This will run the system with three example queries demonstrating different agent types. In development mode (APP_ENV=development), this will also generate a `graph.png` file showing the workflow visualization.
 
+```bash
+(.venv) kpal@Kushs-macbook-pro-M2-Max multi_agent_test % python main.py
+🤖 Multi-Agent Customer Support Chatbot
+Type `q` or `exit` to quit the chat.
+Type `reset` to start a new conversation.
+==================================================
+
+📈 Total Customers in System: 20
+
+💬 Hello! I am your customer support assistant. Please tell me how I can help you today.
+💡 Tip: Include your account ID (e.g., USER123456) or email for faster service.
+
+👤 You: my name is kuldeep
+
+🔄 Processing your request... (Session #1)
+INFO:__main__:Graph visualization saved to graph.png
+INFO:__main__:Processing input
+INFO:agents.router:Classified query as: GENERAL, routing to: general_agent
+INFO:utils.user_identifier:No customer identified from query
+INFO:agents.specialized:General agent processed query: my name is kuldeep...
+INFO:agents.supervisor:Supervisor evaluation - Score: 80, Issues: ['May not fully address query']
+INFO:agents.supervisor:Supervisor improved the response
+INFO:__main__:Generating final output
+
+🤖 Assistant: Thank you for your inquiry. I could not find your account with the information provided. Please provide your account ID (e.g., USER123456) or email address so I can assist you better.
+
+Please let me know if this does not fully address your question or if you need clarification on any point.
+
+👤 You: my name is       "name": "Amanda Foster",
+
+🔄 Processing your request... (Session #2)
+INFO:__main__:Graph visualization saved to graph.png
+INFO:__main__:Processing input
+INFO:agents.router:Classified query as: GENERAL, routing to: general_agent
+INFO:utils.user_identifier:No customer identified from query
+INFO:agents.specialized:General agent processed query: my name is       "name": "Amanda Foster",...
+INFO:agents.supervisor:Supervisor evaluation - Score: 80, Issues: ['May not fully address query']
+INFO:agents.supervisor:Supervisor improved the response
+INFO:__main__:Generating final output
+
+🤖 Assistant: Thank you for your inquiry. I could not find your account with the information provided. Please provide your account ID (e.g., USER123456) or email address so I can assist you better.
+
+Please let me know if this does not fully address your question or if you need clarification on any point.
+
+👤 You: my email is amanda.foster@marketing.pro
+
+🔄 Processing your request... (Session #3)
+INFO:__main__:Graph visualization saved to graph.png
+INFO:__main__:Processing input
+INFO:agents.router:Classified query as: GENERAL, routing to: general_agent
+INFO:utils.user_identifier:Found customer by email: amanda.foster@marketing.pro
+INFO:agents.specialized:User identified: Amanda Foster (USER010234)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:agents.specialized:General agent processed query: my email is amanda.foster@marketing.pro...
+INFO:agents.supervisor:Supervisor evaluation - Score: 100, Issues: []
+INFO:agents.supervisor:Supervisor approved the response as-is
+INFO:__main__:Generating final output
+
+🤖 Assistant: Hi Amanda,
+
+Thank you for reaching out! I see that your email is indeed registered as amanda.foster@marketing.pro. If you have any specific questions or need assistance regarding your account or subscription, feel free to let me know!
+
+I also noticed that your payment status shows as failed. If you need help resolving that issue, it may be best to reach out to our billing support team for more specialized assistance.
+
+If there is anything else I can assist you with, please do not hesitate to ask!
+
+Best regards,  
+[Your Name]  
+Customer Support Team
+
+👤 You: I have an issue of payment
+
+🔄 Processing your request... (Session #4)
+INFO:__main__:Graph visualization saved to graph.png
+INFO:__main__:Processing input
+INFO:agents.router:Classified query as: BILLING, routing to: billing_agent
+INFO:utils.user_identifier:No customer identified from query
+INFO:agents.specialized:Billing agent processed query: I have an issue of payment...
+INFO:agents.supervisor:Supervisor evaluation - Score: 80, Issues: ['May need more empathetic tone']
+INFO:agents.supervisor:Supervisor improved the response
+INFO:__main__:Generating final output
+
+🤖 Assistant: I understand billing concerns can be frustrating. Hello! To provide you with personalized assistance, I will need to identify your account first. Please provide your account ID (e.g., USER123456) or email address.
+
+👤 You: amanda.foster@marketing.pro
+
+🔄 Processing your request... (Session #5)
+INFO:__main__:Graph visualization saved to graph.png
+INFO:__main__:Processing input
+INFO:agents.router:Classified query as: GENERAL, routing to: general_agent
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:agents.specialized:General agent processed query: amanda.foster@marketing.pro...
+INFO:agents.supervisor:Supervisor evaluation - Score: 100, Issues: []
+INFO:agents.supervisor:Supervisor approved the response as-is
+INFO:__main__:Generating final output
+
+🤖 Assistant: Subject: Assistance with Your Account
+
+Hi Amanda,
+
+Thank you for reaching out! I hope you are having a great day.
+
+I noticed that your recent payment status is marked as "failed." This could be why you are experiencing issues with your Premium Plan subscription. To resolve this, I recommend checking your payment details to ensure everything is up to date. You can usually do this in your account settings.
+
+If the issue persists or if you have any questions about the billing process, our billing department would be more than happy to assist you further. You can reach them directly, or let me know if you’d like me to escalate this for you.
+
+Additionally, if there is anything else I can help you with or if you have any other questions, feel free to ask!
+
+Best regards,
+
+[Your Name]  
+Customer Support Representative  
+amanda.foster@marketing.pro  
+Account ID: USER010234
+
+👤 You: amanda.foster@marketing.pro I have billing issue
+
+🔄 Processing your request... (Session #6)
+INFO:__main__:Graph visualization saved to graph.png
+INFO:__main__:Processing input
+INFO:agents.router:Classified query as: BILLING, routing to: billing_agent
+INFO:utils.user_identifier:Found customer by email: amanda.foster@marketing.pro
+INFO:agents.specialized:User identified: Amanda Foster (USER010234)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:agents.specialized:Billing agent processed query: amanda.foster@marketing.pro I have billing issue...
+INFO:agents.supervisor:Supervisor evaluation - Score: 100, Issues: []
+INFO:agents.supervisor:Supervisor approved the response as-is
+INFO:__main__:Generating final output
+
+🤖 Assistant: Subject: Assistance with Your Billing Issue
+
+Dear Amanda,
+
+Thank you for reaching out regarding your billing issue. I see that your last payment, scheduled for June 28, 2024, has unfortunately failed. As a result, your current balance is $29.99.
+
+To resolve this, please check your payment method ending in ****-4681 to ensure it is valid and has sufficient funds. You can update your payment information directly through your account settings.
+
+Your next billing date is set for August 28, 2024, so addressing this issue promptly will ensure your Premium Plan remains active without interruption.
+
+If you need further assistance or have additional questions, please do not hesitate to ask.
+
+Best regards,
+
+[Your Name]  
+Billing Specialist  
+Customer Support Team  
+
+👤 You: q
+
+🤖 Assistant: Thank you for using our support system. Have a great day!
+```
+
 ![Output](output.png)
 
 ### Using the System Programmatically
