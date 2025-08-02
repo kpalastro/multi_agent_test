@@ -297,8 +297,6 @@ Customer Support Team
 🤖 Assistant: Thank you for using our support system. Have a great day!
 ```
 
-![Output](output.png)
-
 ### Using the System Programmatically
 
 ```python
