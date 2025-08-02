@@ -7,3 +7,5 @@ pytest-mock>=3.10
 langgraph
 langchain-core
 python-dotenv
+openai>=1.0.0
+langchain-openai

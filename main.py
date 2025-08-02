@@ -4,6 +4,7 @@ from typing import TypedDict, Annotated, Sequence
 from langchain_core.messages import BaseMessage, HumanMessage
 from langgraph.graph import StateGraph, END
 from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
 
 from agents.router import router_agent
 from agents.specialized import billing_agent, technical_agent, general_agent
@@ -16,6 +17,13 @@ logger = logging.getLogger(__name__)
 
 # Check if we're in development mode
 APP_ENV = os.getenv("APP_ENV", "development")
+
+# Initialize OpenAI model (GPT-4 mini)
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    temperature=0.7,
+    openai_api_key=os.getenv("OPENAI_API_KEY")
+)
 
 class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], "The messages in the conversation"]
@@ -98,19 +106,62 @@ def run_customer_support_system(user_query: str):
         logger.error(f"Error in customer support system: {e}")
         return "I apologize, but I'm experiencing technical difficulties. Please try again later."
 
+def interactive_chatbot():
+    """Interactive chatbot with user identification workflow"""
+    print("🤖 Multi-Agent Customer Support Chatbot")
+    print("Type 'q' or 'exit' to quit the chat.")
+    print("Type 'reset' to start a new conversation.")
+    print("=" * 50)
+    
+    # Import here to avoid circular imports
+    from agents.specialized import billing_agent_instance, technical_agent_instance, general_agent_instance
+    from utils.data_loader import customer_data_loader
+    
+    print(f"\n📈 Total Customers in System: {customer_data_loader.get_total_customers()}")
+    print("\n💬 Hello! I'm your customer support assistant. Please tell me how I can help you today.")
+    print("💡 Tip: Include your account ID (e.g., USER123456) or email for faster service.")
+    
+    session_count = 0
+    
+    while True:
+        try:
+            # Get user input
+            user_input = input("\n👤 You: ").strip()
+            
+            # Check for quit commands
+            if user_input.lower() in ['q', 'quit', 'exit']:
+                print("\n🤖 Assistant: Thank you for using our support system. Have a great day!")
+                break
+            
+            # Check for reset command
+            if user_input.lower() == 'reset':
+                billing_agent_instance.reset_customer_context()
+                technical_agent_instance.reset_customer_context()
+                general_agent_instance.reset_customer_context()
+                
+                print(f"\n🔄 Conversation reset. How can I help you today?")
+                print("💡 Tip: Include your account ID (e.g., USER123456) or email for faster service.")
+                session_count = 0
+                continue
+            
+            if not user_input:
+                print("Please enter a message, 'reset' to start over, or 'q' to quit.")
+                continue
+            
+            session_count += 1
+            print(f"\n🔄 Processing your request... (Session #{session_count})")
+            
+            # Process the query through the multi-agent system
+            response = run_customer_support_system(user_input)
+            
+            print(f"\n🤖 Assistant: {response}")
+            
+        except KeyboardInterrupt:
+            print("\n\n🤖 Assistant: Chat interrupted. Goodbye!")
+            break
+        except Exception as e:
+            logger.error(f"Error in chatbot: {e}")
+            print("\n🤖 Assistant: I apologize, but I encountered an error. Please try again.")
+
 if __name__ == "__main__":
-    # Example usage
-    test_queries = [
-        "I have a billing issue with my account",
-        "The system is not working properly", 
-        "What are your company hours?"
-    ]
-    
-    print("=== Multi-Agent Customer Support System Demo ===\n")
-    
-    for query in test_queries:
-        print(f"User Query: {query}")
-        print("-" * 50)
-        response = run_customer_support_system(query)
-        print(f"System Response: {response}")
-        print("=" * 80 + "\n")
+    interactive_chatbot()

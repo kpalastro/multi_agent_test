@@ -1,6 +1,14 @@
 import logging
-from typing import Dict, Any, List
+import os
+from typing import Dict, Any, List, Optional
 from langchain_core.messages import BaseMessage, AIMessage
+from langchain_openai import ChatOpenAI
+from utils.data_loader import customer_data_loader
+from utils.user_identifier import user_identifier
+from dotenv import load_dotenv
+
+# Load environment variables at module import time
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -8,6 +16,54 @@ class BaseSpecializedAgent:
     def __init__(self, agent_type: str):
         self.agent_type = agent_type
         self.memory: List[Dict[str, Any]] = []
+        self.llm = ChatOpenAI(
+            model="gpt-4o-mini",
+            temperature=0.7,
+            openai_api_key=os.getenv("OPENAI_API_KEY")
+        )
+        self.data_loader = customer_data_loader
+        self.user_identifier = user_identifier
+        self.current_customer = None
+        self.identification_attempts = 0
+        
+    def identify_user_from_query(self, query: str) -> bool:
+        """Try to identify user from query, return True if successful"""
+        if not self.current_customer:
+            identified_customer = self.user_identifier.extract_user_info_from_query(query)
+            if identified_customer:
+                self.current_customer = identified_customer
+                logger.info(f"User identified: {self.current_customer.get('name')} ({self.current_customer.get('id')})")
+                return True
+        return self.current_customer is not None
+        
+    def get_customer_context(self) -> Optional[Dict[str, Any]]:
+        """Get current customer context (None if not identified)"""
+        return self.current_customer
+        
+    def reset_customer_context(self) -> None:
+        """Reset customer context for new conversation"""
+        self.current_customer = None
+        self.identification_attempts = 0
+        
+    def request_user_identification(self, query: str) -> str:
+        """Generate a response asking for user identification"""
+        self.identification_attempts += 1
+        
+        # Check if query seems to be an identification attempt
+        if self.user_identifier.is_identification_attempt(query):
+            return "I couldn't find your account with the information provided. Please provide your account ID (e.g., USER123456) or email address so I can assist you better."
+        
+        # Different messages based on number of attempts
+        if self.identification_attempts == 1:
+            return "Hello! To provide you with personalized assistance, I'll need to identify your account first. Please provide your account ID (e.g., USER123456) or email address."
+        elif self.identification_attempts == 2:
+            return "I still need your account information to help you. You can provide:\n• Your account ID (format: USER123456)\n• Your email address\n• Or say something like 'My account is USER123456'"
+        else:
+            return "I'm having trouble identifying your account. Please double-check and provide your account ID or email address, or contact our support team for assistance."
+        
+    def get_system_status(self) -> Dict[str, Any]:
+        """Get current system status"""
+        return self.data_loader.get_system_status()
     
     def add_to_memory(self, query: str, response: str):
         self.memory.append({
@@ -25,123 +81,138 @@ class BaseSpecializedAgent:
 class BillingAgent(BaseSpecializedAgent):
     def __init__(self):
         super().__init__("billing")
-        self.response_template = """
-        I'm your billing specialist. I can help you with:
-        - Payment issues and billing inquiries
-        - Invoice questions and billing cycles
-        - Refund requests and charge disputes
-        - Account balance and payment methods
-        
-        For your query: "{query}"
-        
-        Based on our records and policies, here's my response:
-        {response_content}
-        
-        If you need further assistance with billing matters, please don't hesitate to ask.
-        """
     
     def generate_response(self, query: str) -> str:
+        # First try to identify the user if not already identified
+        if not self.identify_user_from_query(query):
+            return self.request_user_identification(query)
+            
         memory_context = self.get_relevant_memory(query)
+        customer_data = self.get_customer_context()
+        billing_data = customer_data.get('billing_info', {})
         
-        # Simple response generation based on keywords
-        query_lower = query.lower()
+        # Use OpenAI for more natural responses
+        prompt = f"""
+        You are a billing specialist for a customer support team. Use this context to provide helpful responses:
         
-        if "refund" in query_lower:
-            response_content = "I can help you process a refund. Please provide your order number and reason for the refund request."
-        elif "invoice" in query_lower : #or "bill" in query_lower:
-            response_content = "I can assist with invoice-related questions. Your latest invoice details can be found in your account dashboard."
-        elif "payment" in query_lower:
-            response_content = "For payment issues, please verify your payment method is up to date and has sufficient funds."
-        else:
-            response_content = "I'm here to help with any billing-related concerns you may have."
+        Customer Info:
+        - Account ID: {customer_data.get('id', 'N/A')}
+        - Name: {customer_data.get('name', 'N/A')}
+        - Email: {customer_data.get('email', 'N/A')}
+        - Subscription: {customer_data.get('subscription', 'N/A')}
+        - Join Date: {customer_data.get('join_date', 'N/A')}
+        - Current Balance: ${billing_data.get('current_balance', 0)}
+        - Last Payment: {billing_data.get('last_payment', 'N/A')}
+        - Payment Method: {billing_data.get('payment_method', 'N/A')}
+        - Next Billing: {billing_data.get('next_billing', 'N/A')}
+        - Total Spent: ${billing_data.get('total_spent', 0)}
+        - Payment Status: {billing_data.get('payment_status', 'N/A')}
         
-        response = self.response_template.format(
-            query=query,
-            response_content=response_content
-        )
+        Customer Query: {query}
         
-        self.add_to_memory(query, response)
-        return response
+        Provide a helpful, professional response addressing their billing concern. Keep it concise but informative.
+        If there are payment issues (overdue/failed), acknowledge them appropriately.
+        """
+        
+        try:
+            response = self.llm.invoke(prompt).content
+            self.add_to_memory(query, response)
+            return response
+        except Exception as e:
+            logger.error(f"Error generating OpenAI response: {e}")
+            # Fallback to simple response
+            return "I can help you with billing matters. Please let me know your specific concern and I'll assist you accordingly."
 
 class TechnicalAgent(BaseSpecializedAgent):
     def __init__(self):
         super().__init__("technical")
-        self.response_template = """
-        I'm your technical support specialist. I can assist with:
-        - System bugs and error troubleshooting
-        - Feature requests and functionality questions
-        - Performance issues and optimizations
-        - Integration and API support
-        
-        For your technical query: "{query}"
-        
-        Technical analysis and solution:
-        {response_content}
-        
-        If this doesn't resolve your issue, please provide more details about your setup and error messages.
-        """
     
     def generate_response(self, query: str) -> str:
+        # First try to identify the user if not already identified
+        if not self.identify_user_from_query(query):
+            return self.request_user_identification(query)
+            
         memory_context = self.get_relevant_memory(query)
+        customer_data = self.get_customer_context()
+        tech_profile = customer_data.get('technical_profile', {})
+        system_status = self.get_system_status()
         
-        query_lower = query.lower()
+        # Use OpenAI for more natural responses
+        prompt = f"""
+        You are a technical support specialist. Use this context to provide helpful responses:
         
-        if "bug" in query_lower or "error" in query_lower:
-            response_content = "I can help troubleshoot this issue. Please provide error messages, steps to reproduce, and your system configuration."
-        elif "feature" in query_lower:
-            response_content = "Thank you for your feature suggestion. I'll document this request and forward it to our development team."
-        elif "not working" in query_lower or "broken" in query_lower:
-            response_content = "Let's diagnose this issue. Please try clearing your cache, updating your browser, and check if the problem persists."
-        else:
-            response_content = "I'm here to help resolve any technical issues you're experiencing."
+        Customer Info:
+        - Account ID: {customer_data.get('id', 'N/A')}
+        - Name: {customer_data.get('name', 'N/A')}
+        - Platform: {tech_profile.get('platform', 'N/A')}
+        - Browser: {tech_profile.get('browser', 'N/A')}
+        - Last Login: {customer_data.get('last_login', 'N/A')}
+        - Previous Issues: {tech_profile.get('last_issue', 'None')}
+        - Support Tickets: {tech_profile.get('support_tickets', 0)}
         
-        response = self.response_template.format(
-            query=query,
-            response_content=response_content
-        )
+        System Status:
+        - Overall Status: {system_status.get('overall_status', 'operational')}
+        - Last Maintenance: {system_status.get('last_maintenance', 'N/A')}
+        - Known Issues: {', '.join(system_status.get('known_issues', []))}
+        - Recent Updates: {', '.join(system_status.get('recent_updates', []))}
         
-        self.add_to_memory(query, response)
-        return response
+        Customer Query: {query}
+        
+        Provide a helpful technical response. Include troubleshooting steps if relevant.
+        If there are known system issues that might be related, mention them.
+        """
+        
+        try:
+            response = self.llm.invoke(prompt).content
+            self.add_to_memory(query, response)
+            return response
+        except Exception as e:
+            logger.error(f"Error generating OpenAI response: {e}")
+            # Fallback to simple response
+            return "I'm here to help with technical issues. Please describe the problem and I'll do my best to assist you."
 
 class GeneralAgent(BaseSpecializedAgent):
     def __init__(self):
         super().__init__("general")
-        self.response_template = """
-        Hello! I'm here to help with general inquiries. I can assist with:
-        - Account information and settings
-        - Company policies and procedures  
-        - General product information
-        - Directing you to the right specialist
-        
-        Regarding your inquiry: "{query}"
-        
-        Here's the information I can provide:
-        {response_content}
-        
-        Is there anything else I can help you with today?
-        """
     
     def generate_response(self, query: str) -> str:
+        # First try to identify the user if not already identified
+        if not self.identify_user_from_query(query):
+            return self.request_user_identification(query)
+            
         memory_context = self.get_relevant_memory(query)
+        customer_data = self.get_customer_context()
+        billing_data = customer_data.get('billing_info', {})
+        tech_profile = customer_data.get('technical_profile', {})
         
-        query_lower = query.lower()
+        # Use OpenAI for more natural responses
+        prompt = f"""
+        You are a general customer support representative. Use this context to provide helpful responses:
         
-        if "account" in query_lower:
-            response_content = "For account-related questions, you can manage your settings in the user dashboard or contact our support team."
-        elif "company" in query_lower or "about" in query_lower:
-            response_content = "Our company is committed to providing excellent service. You can find more information on our website's About page."
-        elif "help" in query_lower:
-            response_content = "I'm here to help! Please let me know what specific information you're looking for."
-        else:
-            response_content = "Thank you for contacting us. I'm here to assist with any general questions you may have."
+        Customer Info:
+        - Account ID: {customer_data.get('id', 'N/A')}
+        - Name: {customer_data.get('name', 'N/A')}
+        - Email: {customer_data.get('email', 'N/A')}
+        - Subscription: {customer_data.get('subscription', 'N/A')}
+        - Join Date: {customer_data.get('join_date', 'N/A')}
+        - Last Login: {customer_data.get('last_login', 'N/A')}
+        - Payment Status: {billing_data.get('payment_status', 'N/A')}
+        - Support History: {tech_profile.get('support_tickets', 0)} previous tickets
         
-        response = self.response_template.format(
-            query=query,
-            response_content=response_content
-        )
+        Customer Query: {query}
         
-        self.add_to_memory(query, response)
-        return response
+        Provide a helpful, friendly response. If the query might be better handled by billing or technical support, mention that option.
+        Reference their account information when relevant to personalize the response.
+        """
+        
+        try:
+            response = self.llm.invoke(prompt).content
+            self.add_to_memory(query, response)
+            return response
+        except Exception as e:
+            logger.error(f"Error generating OpenAI response: {e}")
+            # Fallback to simple response
+            return "Thank you for contacting us! I'm here to help with any questions you may have."
 
 # Agent instances
 billing_agent_instance = BillingAgent()

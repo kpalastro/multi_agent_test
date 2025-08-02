@@ -1,0 +1,461 @@
+{
+  "customers": [
+    {
+      "id": "USER001234",
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "subscription": "Premium Plan",
+      "join_date": "2023-01-15",
+      "last_login": "2024-07-28",
+      "billing_info": {
+        "current_balance": 29.99,
+        "last_payment": "2024-07-15",
+        "payment_method": "****-1234",
+        "next_billing": "2024-08-15",
+        "total_spent": 359.88,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Web",
+        "browser": "Chrome",
+        "last_issue": "Minor UI glitch",
+        "support_tickets": 2
+      }
+    },
+    {
+      "id": "USER002456",
+      "name": "Sarah Wilson",
+      "email": "sarah.wilson@techcorp.com",
+      "subscription": "Enterprise Plan",
+      "join_date": "2022-11-20",
+      "last_login": "2024-07-30",
+      "billing_info": {
+        "current_balance": 99.99,
+        "last_payment": "2024-07-01",
+        "payment_method": "****-5678",
+        "next_billing": "2024-08-01",
+        "total_spent": 1199.88,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Mobile App",
+        "browser": "Safari",
+        "last_issue": "API integration",
+        "support_tickets": 5
+      }
+    },
+    {
+      "id": "USER003789",
+      "name": "Mike Johnson",
+      "email": "mike.j@startup.io",
+      "subscription": "Basic Plan",
+      "join_date": "2024-03-10",
+      "last_login": "2024-07-29",
+      "billing_info": {
+        "current_balance": 9.99,
+        "last_payment": "2024-07-10",
+        "payment_method": "****-9012",
+        "next_billing": "2024-08-10",
+        "total_spent": 49.95,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Desktop",
+        "browser": "Firefox",
+        "last_issue": "Slow loading",
+        "support_tickets": 1
+      }
+    },
+    {
+      "id": "USER004321",
+      "name": "Emily Chen",
+      "email": "emily.chen@design.com",
+      "subscription": "Premium Plan",
+      "join_date": "2023-06-05",
+      "last_login": "2024-07-31",
+      "billing_info": {
+        "current_balance": 29.99,
+        "last_payment": "2024-07-05",
+        "payment_method": "****-3456",
+        "next_billing": "2024-08-05",
+        "total_spent": 389.87,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Web",
+        "browser": "Edge",
+        "last_issue": "Export feature",
+        "support_tickets": 3
+      }
+    },
+    {
+      "id": "USER005654",
+      "name": "David Rodriguez",
+      "email": "d.rodriguez@consulting.net",
+      "subscription": "Enterprise Plan",
+      "join_date": "2022-08-12",
+      "last_login": "2024-07-27",
+      "billing_info": {
+        "current_balance": 99.99,
+        "last_payment": "2024-06-12",
+        "payment_method": "****-7890",
+        "next_billing": "2024-08-12",
+        "total_spent": 2399.76,
+        "payment_status": "overdue"
+      },
+      "technical_profile": {
+        "platform": "Mobile App",
+        "browser": "Chrome Mobile",
+        "last_issue": "Login problems",
+        "support_tickets": 4
+      }
+    },
+    {
+      "id": "USER006987",
+      "name": "Lisa Thompson",
+      "email": "lisa.t@freelance.com",
+      "subscription": "Basic Plan",
+      "join_date": "2024-01-22",
+      "last_login": "2024-07-30",
+      "billing_info": {
+        "current_balance": 9.99,
+        "last_payment": "2024-07-22",
+        "payment_method": "****-2468",
+        "next_billing": "2024-08-22",
+        "total_spent": 59.94,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Web",
+        "browser": "Safari",
+        "last_issue": "Dashboard bug",
+        "support_tickets": 2
+      }
+    },
+    {
+      "id": "USER007123",
+      "name": "Alex Martinez",
+      "email": "alex.martinez@agency.co",
+      "subscription": "Premium Plan",
+      "join_date": "2023-04-18",
+      "last_login": "2024-07-28",
+      "billing_info": {
+        "current_balance": 29.99,
+        "last_payment": "2024-07-18",
+        "payment_method": "****-1357",
+        "next_billing": "2024-08-18",
+        "total_spent": 419.86,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Desktop",
+        "browser": "Chrome",
+        "last_issue": "Performance issue",
+        "support_tickets": 6
+      }
+    },
+    {
+      "id": "USER008456",
+      "name": "Rachel Green",
+      "email": "rachel.green@corp.com",
+      "subscription": "Enterprise Plan",
+      "join_date": "2022-12-03",
+      "last_login": "2024-07-31",
+      "billing_info": {
+        "current_balance": 99.99,
+        "last_payment": "2024-07-03",
+        "payment_method": "****-8642",
+        "next_billing": "2024-08-03",
+        "total_spent": 1899.81,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Web",
+        "browser": "Chrome",
+        "last_issue": "Integration error",
+        "support_tickets": 8
+      }
+    },
+    {
+      "id": "USER009789",
+      "name": "Kevin Park",
+      "email": "kevin.park@tech.startup",
+      "subscription": "Basic Plan",
+      "join_date": "2024-05-14",
+      "last_login": "2024-07-29",
+      "billing_info": {
+        "current_balance": 9.99,
+        "last_payment": "2024-07-14",
+        "payment_method": "****-9753",
+        "next_billing": "2024-08-14",
+        "total_spent": 29.97,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Mobile App",
+        "browser": "Chrome Mobile",
+        "last_issue": "App crash",
+        "support_tickets": 1
+      }
+    },
+    {
+      "id": "USER010234",
+      "name": "Amanda Foster",
+      "email": "amanda.foster@marketing.pro",
+      "subscription": "Premium Plan",
+      "join_date": "2023-02-28",
+      "last_login": "2024-07-30",
+      "billing_info": {
+        "current_balance": 29.99,
+        "last_payment": "2024-06-28",
+        "payment_method": "****-4681",
+        "next_billing": "2024-08-28",
+        "total_spent": 479.84,
+        "payment_status": "failed"
+      },
+      "technical_profile": {
+        "platform": "Web",
+        "browser": "Firefox",
+        "last_issue": "Data export",
+        "support_tickets": 3
+      }
+    },
+    {
+      "id": "USER011567",
+      "name": "James Wilson",
+      "email": "j.wilson@enterprise.biz",
+      "subscription": "Enterprise Plan",
+      "join_date": "2022-07-11",
+      "last_login": "2024-07-26",
+      "billing_info": {
+        "current_balance": 99.99,
+        "last_payment": "2024-07-11",
+        "payment_method": "****-1122",
+        "next_billing": "2024-08-11",
+        "total_spent": 2499.75,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Desktop",
+        "browser": "Edge",
+        "last_issue": "SSO integration",
+        "support_tickets": 7
+      }
+    },
+    {
+      "id": "USER012890",
+      "name": "Nina Patel",
+      "email": "nina.patel@consulting.group",
+      "subscription": "Basic Plan",
+      "join_date": "2024-06-08",
+      "last_login": "2024-07-31",
+      "billing_info": {
+        "current_balance": 9.99,
+        "last_payment": "2024-07-08",
+        "payment_method": "****-3344",
+        "next_billing": "2024-08-08",
+        "total_spent": 19.98,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Mobile App",
+        "browser": "Safari Mobile",
+        "last_issue": "UI rendering",
+        "support_tickets": 0
+      }
+    },
+    {
+      "id": "USER013456",
+      "name": "Robert Kim",
+      "email": "robert.kim@fintech.io",
+      "subscription": "Premium Plan",
+      "join_date": "2023-09-15",
+      "last_login": "2024-07-29",
+      "billing_info": {
+        "current_balance": 29.99,
+        "last_payment": "2024-07-15",
+        "payment_method": "****-5566",
+        "next_billing": "2024-08-15",
+        "total_spent": 329.89,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Web",
+        "browser": "Chrome",
+        "last_issue": "API timeout",
+        "support_tickets": 4
+      }
+    },
+    {
+      "id": "USER014789",
+      "name": "Grace Liu",
+      "email": "grace.liu@design.studio",
+      "subscription": "Enterprise Plan",
+      "join_date": "2022-10-20",
+      "last_login": "2024-07-31",
+      "billing_info": {
+        "current_balance": 99.99,
+        "last_payment": "2024-07-20",
+        "payment_method": "****-7788",
+        "next_billing": "2024-08-20",
+        "total_spent": 2199.78,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Desktop",
+        "browser": "Safari",
+        "last_issue": "File upload",
+        "support_tickets": 5
+      }
+    },
+    {
+      "id": "USER015123",
+      "name": "Marcus Brown",
+      "email": "marcus.brown@agency.net",
+      "subscription": "Basic Plan",
+      "join_date": "2024-04-02",
+      "last_login": "2024-07-28",
+      "billing_info": {
+        "current_balance": 9.99,
+        "last_payment": "2024-07-02",
+        "payment_method": "****-9900",
+        "next_billing": "2024-08-02",
+        "total_spent": 39.96,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Mobile App",
+        "browser": "Chrome Mobile",
+        "last_issue": "Sync issues",
+        "support_tickets": 2
+      }
+    },
+    {
+      "id": "USER016456",
+      "name": "Sophie Davis",
+      "email": "sophie.davis@ecommerce.com",
+      "subscription": "Premium Plan",
+      "join_date": "2023-07-25",
+      "last_login": "2024-07-30",
+      "billing_info": {
+        "current_balance": 29.99,
+        "last_payment": "2024-07-25",
+        "payment_method": "****-2211",
+        "next_billing": "2024-08-25",
+        "total_spent": 359.88,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Web",
+        "browser": "Firefox",
+        "last_issue": "Search function",
+        "support_tickets": 1
+      }
+    },
+    {
+      "id": "USER017789",
+      "name": "Tyler Anderson",
+      "email": "tyler.anderson@startup.tech",
+      "subscription": "Enterprise Plan",
+      "join_date": "2022-09-08",
+      "last_login": "2024-07-27",
+      "billing_info": {
+        "current_balance": 99.99,
+        "last_payment": "2024-06-08",
+        "payment_method": "****-4433",
+        "next_billing": "2024-08-08",
+        "total_spent": 2299.77,
+        "payment_status": "overdue"
+      },
+      "technical_profile": {
+        "platform": "Desktop",
+        "browser": "Chrome",
+        "last_issue": "Database error",
+        "support_tickets": 9
+      }
+    },
+    {
+      "id": "USER018012",
+      "name": "Olivia Taylor",
+      "email": "olivia.taylor@media.co",
+      "subscription": "Basic Plan",
+      "join_date": "2024-02-14",
+      "last_login": "2024-07-31",
+      "billing_info": {
+        "current_balance": 9.99,
+        "last_payment": "2024-07-14",
+        "payment_method": "****-6655",
+        "next_billing": "2024-08-14",
+        "total_spent": 59.94,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Mobile App",
+        "browser": "Safari Mobile",
+        "last_issue": "Video playback",
+        "support_tickets": 3
+      }
+    },
+    {
+      "id": "USER019345",
+      "name": "Daniel White",
+      "email": "daniel.white@consulting.firm",
+      "subscription": "Premium Plan",
+      "join_date": "2023-05-30",
+      "last_login": "2024-07-29",
+      "billing_info": {
+        "current_balance": 29.99,
+        "last_payment": "2024-07-30",
+        "payment_method": "****-8877",
+        "next_billing": "2024-08-30",
+        "total_spent": 389.87,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Web",
+        "browser": "Edge",
+        "last_issue": "Report generation",
+        "support_tickets": 2
+      }
+    },
+    {
+      "id": "USER020678",
+      "name": "Hannah Miller",
+      "email": "hannah.miller@nonprofit.org",
+      "subscription": "Enterprise Plan",
+      "join_date": "2022-11-16",
+      "last_login": "2024-07-31",
+      "billing_info": {
+        "current_balance": 99.99,
+        "last_payment": "2024-07-16",
+        "payment_method": "****-1100",
+        "next_billing": "2024-08-16",
+        "total_spent": 1799.82,
+        "payment_status": "active"
+      },
+      "technical_profile": {
+        "platform": "Desktop",
+        "browser": "Firefox",
+        "last_issue": "Email notifications",
+        "support_tickets": 6
+      }
+    }
+  ],
+  "system_status": {
+    "overall_status": "operational",
+    "last_maintenance": "2024-07-20",
+    "known_issues": [
+      "Minor UI glitch in dashboard",
+      "Slow loading on mobile devices",
+      "Email notification delays",
+      "Search function optimization needed"
+    ],
+    "recent_updates": [
+      "Security patch 1.2.3 deployed",
+      "Performance improvements for large datasets",
+      "New export functionality added",
+      "Mobile app bug fixes"
+    ],
+    "maintenance_schedule": "Next maintenance: August 15, 2024 at 2:00 AM UTC"
+  }
+}
